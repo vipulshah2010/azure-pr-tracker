@@ -1,3 +1,6 @@
+![License](https://img.shields.io/github/license/vipulshah2010/azure-pr-tracker)
+![Release](https://img.shields.io/github/v/release/vipulshah2010/azure-pr-tracker)
+
 # Azure PR Tracker Chrome Extension
 
 A Chrome extension that helps you track Pull Requests from Azure DevOps repositories. The extension provides a clean, user-friendly interface to view and monitor PRs organized by creators.
