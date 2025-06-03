@@ -100,6 +100,16 @@ function renderPRs(prs, container) {
     });
 }
 
+/**
+ * Fetches pull requests from an Azure DevOps repository and displays them grouped by creator in the UI.
+ *
+ * Retrieves repository details and associated pull requests using the provided organization, project, repository, and personal access token (PAT). Updates the UI to show loading status, errors, or the grouped pull requests in a tabbed interface.
+ *
+ * @param {string} organization - The Azure DevOps organization name.
+ * @param {string} project - The Azure DevOps project name.
+ * @param {string} repository - The repository name within the project.
+ * @param {string} pat - The personal access token for authentication.
+ */
 function fetchPullRequests(organization, project, repository, pat) {
     const repoApiUrl = `https://dev.azure.com/${organization}/${project}/_apis/git/repositories/${repository}?api-version=6.0`;
     const headers = new Headers();
