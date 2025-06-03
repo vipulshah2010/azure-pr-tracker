@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const organization = document.getElementById('organization').value;
         const project = document.getElementById('project').value;
         const repository = document.getElementById('repository').value;
-        const pat = document.getElementById('pat').value;
+        const pat = 'abc132133iaaisdjwei23'
         
         chrome.storage.sync.set({
             organization: organization,
