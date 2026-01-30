@@ -18,6 +18,9 @@ A Chrome extension that helps you track Pull Requests from Azure DevOps reposito
 - Customizable settings for different organizations and repositories
 - Secure PAT (Personal Access Token) storage
 
+## Screenshot
+<img src="Screenshot.png" alt="Azure Pr Tracker" width="700">
+
 ## Installation
 
 1. Clone this repository or download the source code
