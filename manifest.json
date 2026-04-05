@@ -4,8 +4,10 @@
     "version": "1.0",
     "description": "Lists Pull Requests from Azure DevOps",
     "permissions": [
-      "activeTab",
       "storage"
+    ],
+    "host_permissions": [
+      "https://dev.azure.com/*"
     ],
     "action": {
       "default_popup": "popup.html",

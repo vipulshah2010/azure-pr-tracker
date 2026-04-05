@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Azure PR Tracker</title>
     <style>
         :root {
@@ -8,30 +9,24 @@
             --theme-hover: #e65800;
             --theme-light: #fff1e8;
         }
-        
+
         body {
             width: 500px;
             padding: 10px;
             font-family: Arial, sans-serif;
+            font-size: 14px;
         }
-        
-        .pr-item {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            transition: border-color 0.2s;
-        }
-        
-        .pr-item:hover {
-            border-color: var(--theme-color);
-        }
-        
+
+        /* ------------------------------------------------------------------ */
+        /* Settings form                                                        */
+        /* ------------------------------------------------------------------ */
+
         .settings {
             margin-bottom: 15px;
         }
-        
-        input {
+
+        #settings-form input {
+            display: block;
             margin: 5px 0;
             padding: 8px;
             width: 100%;
@@ -39,15 +34,21 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        
-        input:focus {
+
+        #settings-form input:focus {
             outline: none;
             border-color: var(--theme-color);
             box-shadow: 0 0 0 2px rgba(255, 98, 0, 0.1);
         }
-        
-        button {
+
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-top: 10px;
+        }
+
+        button {
             padding: 8px 16px;
             background-color: var(--theme-color);
             color: white;
@@ -56,11 +57,32 @@
             cursor: pointer;
             transition: background-color 0.2s;
         }
-        
-        button:hover {
+
+        button:hover:not(:disabled) {
             background-color: var(--theme-hover);
         }
-        
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .save-feedback {
+            font-size: 13px;
+        }
+
+        .save-feedback-ok {
+            color: #1e7e34;
+        }
+
+        .save-feedback-error {
+            color: #c62828;
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Tabs                                                                 */
+        /* ------------------------------------------------------------------ */
+
         .tabs {
             margin-top: 20px;
             border-bottom: 2px solid var(--theme-color);
@@ -68,7 +90,7 @@
             flex-wrap: wrap;
             gap: 5px;
         }
-        
+
         .tab {
             padding: 8px 16px;
             cursor: pointer;
@@ -77,30 +99,20 @@
             border-radius: 4px 4px 0 0;
             background: #f5f5f5;
             transition: all 0.2s;
+            user-select: none;
         }
-        
+
         .tab:hover {
             background: var(--theme-light);
             border-color: var(--theme-color);
         }
-        
+
         .tab.active {
             background: var(--theme-color);
             color: white;
             border-color: var(--theme-color);
         }
-        
-        .tab-content {
-            display: none;
-            margin-top: 20px;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
+
         .pr-count {
             margin-left: 5px;
             background: #e0e0e0;
@@ -109,37 +121,133 @@
             font-size: 12px;
             transition: all 0.2s;
         }
-        
+
         .active .pr-count {
             background: white;
             color: var(--theme-color);
         }
-        
+
+        /* ------------------------------------------------------------------ */
+        /* Tab content                                                          */
+        /* ------------------------------------------------------------------ */
+
+        .tab-content {
+            display: none;
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* PR items                                                             */
+        /* ------------------------------------------------------------------ */
+
+        .pr-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.2s;
+        }
+
+        .pr-item:hover {
+            border-color: var(--theme-color);
+        }
+
+        .pr-item h3 {
+            margin: 0 0 6px;
+            font-size: 14px;
+        }
+
+        .pr-item p {
+            margin: 3px 0;
+            color: #555;
+            font-size: 13px;
+        }
+
         a {
             color: var(--theme-color);
             text-decoration: none;
+            font-size: 13px;
         }
-        
+
         a:hover {
             text-decoration: underline;
             color: var(--theme-hover);
         }
-        
-        /* Scrollbar styling */
-        .tab-content::-webkit-scrollbar {
-            width: 1px;
+
+        /* ------------------------------------------------------------------ */
+        /* Status badge                                                         */
+        /* ------------------------------------------------------------------ */
+
+        .status {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: capitalize;
         }
-        
+
+        .status-active    { background: #e6f4ea; color: #1e7e34; }
+        .status-completed { background: #e8f0fe; color: #1a56db; }
+        .status-abandoned { background: #fce8e6; color: #c62828; }
+
+        /* ------------------------------------------------------------------ */
+        /* Loading / error / empty states                                       */
+        /* ------------------------------------------------------------------ */
+
+        .loading {
+            padding: 10px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .error-message {
+            margin-top: 10px;
+            padding: 10px 12px;
+            background: #fce8e6;
+            border: 1px solid #f5c6c6;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #c62828;
+            line-height: 1.5;
+        }
+
+        .error-message p {
+            margin: 5px 0 0;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .empty-state {
+            padding: 10px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Scrollbar                                                            */
+        /* ------------------------------------------------------------------ */
+
+        .tab-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
         .tab-content::-webkit-scrollbar-track {
             background: #f1f1f1;
-            border-radius: 2px;
+            border-radius: 3px;
         }
-        
+
         .tab-content::-webkit-scrollbar-thumb {
             background: var(--theme-color);
-            border-radius: 2px;
+            border-radius: 3px;
         }
-        
+
         .tab-content::-webkit-scrollbar-thumb:hover {
             background: var(--theme-hover);
         }
@@ -147,14 +255,21 @@
 </head>
 <body>
     <div class="settings">
-        <input type="text" id="organization" placeholder="Organization name">
-        <input type="text" id="project" placeholder="Project name">
-        <input type="text" id="repository" placeholder="Repository name">
-        <input type="password" id="pat" placeholder="Personal Access Token">
-        <button id="save">Save Settings</button>
+        <div id="settings-form">
+            <input type="text"     id="organization" placeholder="Organization name"    autocomplete="off" spellcheck="false">
+            <input type="text"     id="project"      placeholder="Project name"          autocomplete="off" spellcheck="false">
+            <input type="text"     id="repository"   placeholder="Repository name"       autocomplete="off" spellcheck="false">
+            <input type="password" id="pat"           placeholder="Personal Access Token" autocomplete="off">
+            <div class="form-actions">
+                <button id="save">Save Settings</button>
+                <span id="save-feedback" class="save-feedback"></span>
+            </div>
+        </div>
     </div>
+
     <div id="tabs" class="tabs"></div>
     <div id="tab-contents"></div>
+
     <script src="popup.js"></script>
 </body>
 </html>
